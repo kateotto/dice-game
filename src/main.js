@@ -8,11 +8,12 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 import axios from "axios";
 import { VueAxios } from "vue-axios";
 
-import { api } from "./conf/api";
+import { api, diceApi } from "./conf/api";
 
 Vue.config.productionTip = false;
 
 Vue.prototype.$apiUrl = api;
+Vue.prototype.$diceApi = diceApi;
 
 Vue.use(BootstrapVue, VueAxios, axios);
 
