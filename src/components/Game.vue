@@ -2,8 +2,8 @@
   <div>
     <div class="container" v-if="isGameLoaded">
       <div v-if="throwNumber < 4">Throw number: {{ throwNumber }}</div>
-      <div v-else>throwNumber: 3</div>
-      <div>Points to win game: {{ gamePoints }}</div>
+      <div v-else>Throw number: 3</div>
+      <div>Points to win the game: {{ gamePoints }}</div>
       <div>Your points: {{ userPoints }}</div>
       <div v-if="dicesLeft > 0">
         How many dices would you like to use in this throw?
@@ -25,7 +25,7 @@
       <button
         v-if="dicesLeft > 0 && this.throwNumber < 4"
         @click="trowDices()"
-        class="mt-3"
+        class="mt-4 button"
       >
         THROW THE DICES
       </button>
@@ -72,8 +72,6 @@ export default {
         .then(({ data }) => {
           let arr = [];
           this.dicesArr = [];
-          // console.log(arr);
-          // console.log(data.length);
           if (data.length > 3) {
             arr = data.split("");
             console.log(arr);
@@ -167,6 +165,11 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: #fff;
+  padding: 30px;
+  height: 60vh;
+  font-size: 18px;
+  box-shadow: 2px 2px 50px #0005;
 
   &__image {
     display: flex;
@@ -177,5 +180,20 @@ export default {
       border-radius: 15px;
     }
   }
+}
+
+.button {
+  border: none;
+  background: #1d976c; /* fallback for old browsers */
+  padding: 15px 8px;
+  border-radius: 25px;
+  outline: transparent;
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
+}
+
+#dices {
+  width: 150px;
 }
 </style>
