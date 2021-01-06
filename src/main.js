@@ -13,7 +13,7 @@ import { api, diceApi } from "./conf/api";
 Vue.config.productionTip = false;
 
 Vue.prototype.$apiUrl = api;
-Vue.prototype.$diceApi = diceApi;
+Vue.prototype.diceApi = diceApi;
 
 Vue.use(BootstrapVue, VueAxios, axios);
 
