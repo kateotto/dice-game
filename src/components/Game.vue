@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="container">
-      <div v-if="round < 4">Round: {{ round }}</div>
-      <div v-else>Round: 3</div>
+    <div class="container" v-if="isGameLoaded">
+      <div v-if="throwNumber < 4">Throw number: {{ throwNumber }}</div>
+      <div v-else>throwNumber: 3</div>
       <div>Points to win game: {{ gamePoints }}</div>
       <div>Your points: {{ userPoints }}</div>
       <div v-if="dicesLeft > 0">
-        How many dices would you like to use in this round?
+        How many dices would you like to use in this throw?
       </div>
       <div v-else>You had used all dices</div>
       <div>
@@ -22,7 +22,11 @@
           }}</option>
         </select>
       </div>
-      <button v-if="dicesLeft > 0" @click="trowDices()" class="mt-3">
+      <button
+        v-if="dicesLeft > 0 && this.throwNumber < 4"
+        @click="trowDices()"
+        class="mt-3"
+      >
         THROW THE DICES
       </button>
       <div class="container__image mt-3" v-if="this.dicesArr.length">
@@ -37,16 +41,20 @@
 import axios from "axios";
 export default {
   name: "GameContainer",
-  components: {},
+  props: {
+    reload: Number
+  },
   data() {
     return {
-      round: 1,
+      throwNumber: 1,
       gamePoints: 0,
       userPoints: 0,
       dicesLeft: 5,
       dicesArr: [],
       selectedDices: 1,
-      url: "http://roll.diceapi.com/images/poorly-drawn/d6/"
+      url: "http://roll.diceapi.com/images/poorly-drawn/d6/",
+      isGameLoaded: false,
+      gameStatus: ""
     };
   },
   methods: {
@@ -83,13 +91,9 @@ export default {
             console.log(typeof data);
             this.userPoints = this.userPoints + data;
             this.dicesArr.push(data);
-            // const p = parseInt(data[0]);
-            // console.log(p);
-            // this.dicesArr = p;
-            // this.userPoints = p;
           }
-          // console.log(this.dicesArr);
-          // this.round += this.round;
+          this.selectedDices = 1;
+          this.throwNumber = this.throwNumber + 1;
         })
         .catch(error => {
           console.log(error);
@@ -102,13 +106,25 @@ export default {
             "num=1&min=10&max=30&col=1&base=10&format=plain&rnd=new"
         )
         .then(({ data }) => {
-          // console.log("drawPointsSum");
-          // console.log(data);
+          this.isGameLoaded = false;
           this.gamePoints = data;
+          this.isGameLoaded = true;
         })
         .catch(error => {
           console.log(error);
         });
+    },
+    sumGame() {
+      this.gamePoints - this.userPoints == 0
+        ? (this.gameStatus = "win")
+        : (this.gameStatus = "lose");
+      const data = {
+        status: this.gameStatus,
+        userPoints: this.userPoints,
+        gamePoints: this.gamePoints,
+        dicesLeft: this.dicesLeft
+      };
+      this.$emit("gameover", data);
     }
   },
 
@@ -116,15 +132,30 @@ export default {
     this.drawPointsSum();
   },
   watch: {
-    round: function() {
-      if (this.round > 3) {
+    throwNumber: function() {
+      if (this.throwNumber > 3) {
         console.log("game over");
+        this.sumGame();
+      }
+    },
+    dicesLeft: function() {
+      if (this.dicesLeft === 0) {
+        console.log("game over");
+        this.sumGame();
       }
     },
     userPoints: function() {
       if (this.userPoints > this.gamePoints) {
         console.log("game over");
+        this.sumGame();
       }
+    },
+    reload: function() {
+      this.throwNumber = 1;
+      this.userPoints = 0;
+      this.dicesLeft = 5;
+      this.dicesArr = [];
+      this.drawPointsSum();
     }
   }
 };
@@ -143,6 +174,7 @@ export default {
       width: 100px;
       height: 100px;
       margin: 0 10px;
+      border-radius: 15px;
     }
   }
 }

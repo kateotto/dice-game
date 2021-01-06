@@ -5,4 +5,10 @@
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+body {
+  margin: 0;
+  padding: 0 auto;
+  box-sizing: border-box;
+}
+</style>

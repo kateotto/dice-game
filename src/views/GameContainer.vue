@@ -5,9 +5,23 @@
       <button class="mt-3" @click="isGameStart = false">Play tha game</button>
     </Modal>
     <Modal v-if="isGameOver">
-      <button class="mt-3" @click="isGameOver = false">Play again</button>
+      <div>Game status: {{ gameStat.status }}</div>
+      <div v-if="gameStat.status == 'win'">CONGRATULATION!</div>
+      <div v-else>
+        <div>All points: {{ gameStat.gamePoints }}</div>
+        <div>Your points: {{ gameStat.userPoints }}</div>
+      </div>
+      <button
+        class="mt-3"
+        @click="
+          isGameOver = false;
+          game = game + 1;
+        "
+      >
+        Play again
+      </button>
     </Modal>
-    <Game />
+    <Game @gameover="setGameover" :reload="game" />
   </div>
 </template>
 <script>
@@ -22,8 +36,17 @@ export default {
   data() {
     return {
       isGameStart: false,
-      isGameOver: false
+      isGameOver: false,
+      game: 0,
+      gameStat: {}
     };
+  },
+  methods: {
+    setGameover(data) {
+      this.isGameOver = true;
+      console.log(data);
+      this.gameStat = data;
+    }
   }
 };
 </script>
