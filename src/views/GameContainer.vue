@@ -43,7 +43,7 @@
         Play again
       </button>
     </Modal>
-    <Game @gameover="setGameover" :reload="game" />
+    <Game v-if="!isGameStart" @gameover="setGameover" :reload="game" />
   </div>
 </template>
 <script>
