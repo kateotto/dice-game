@@ -26,7 +26,7 @@
         Game status: <br />
         <span class="highlight">{{ gameStat.status }}</span>
       </div>
-      <div v-if="gameStat.status !== 'win'" class="highlight__win">
+      <div v-if="gameStat.status == 'win'" class="highlight__win">
         CONGRATULATION!
       </div>
       <div v-else>

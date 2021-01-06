@@ -65,7 +65,6 @@ export default {
   methods: {
     trowDices() {
       this.dicesLeft = this.dicesLeft - this.selectedDices;
-      console.log("throw");
       this.drawDiceNumber();
     },
     drawDiceNumber() {
@@ -79,19 +78,16 @@ export default {
           this.dicesArr = [];
           if (data.length > 3) {
             arr = data.split("");
-            console.log(arr);
             arr.map((x, index) => {
               if (index % 2 === 0) {
                 this.dicesArr.push(parseInt(x));
               }
             });
-            console.log(this.dicesArr);
             const p = this.dicesArr.reduce((a, b) => {
               return a + b;
             });
             this.userPoints = this.userPoints + p;
           } else {
-            console.log(typeof data);
             this.userPoints = this.userPoints + data;
             this.dicesArr.push(data);
           }
@@ -137,19 +133,16 @@ export default {
   watch: {
     throwNumber: function() {
       if (this.throwNumber > 3) {
-        console.log("game over");
         this.sumGame();
       }
     },
     dicesLeft: function() {
       if (this.dicesLeft === 0) {
-        console.log("game over");
         this.sumGame();
       }
     },
     userPoints: function() {
       if (this.userPoints > this.gamePoints) {
-        console.log("game over");
         this.sumGame();
       }
     },
